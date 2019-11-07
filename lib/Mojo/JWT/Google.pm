@@ -56,7 +56,7 @@ sub _construct_claims {
   $result->{iss}   = $self->client_email;
   $result->{aud}   = $self->target;
   $result->{sub}   = $self->user_as if defined $self->user_as;
-  my @scopes = $self->scopes->@*;
+  my @scopes = @{ $self->scopes };
 
   croak "Can't use both scopes and audience in the same token" if @scopes && $self->audience;
   $result->{scope} = c(@scopes)->join(' ')->to_string if @scopes;
