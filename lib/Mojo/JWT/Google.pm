@@ -8,7 +8,7 @@ use Mojo::JSON qw(decode_json);
 use Carp;
 
 BEGIN {
-  $Mojo::JWT::Google::VERSION = '0.06';
+  $Mojo::JWT::Google::VERSION = '0.07';
 }
 
 has client_email => undef;
@@ -27,7 +27,7 @@ sub new {
   my $result = $self->from_json($self->{from_json});
 
   if ( $result == 0 ) {
-    say 'Your JSON file import failed.';
+    croak 'Your JSON file import failed.';
     return undef;
   }
   return $self;
