@@ -17,3 +17,5 @@ nytprof.out
 *.bs
 /_eumm/
 /Mojo-JWT-Google-*
+
+.*.sw?
