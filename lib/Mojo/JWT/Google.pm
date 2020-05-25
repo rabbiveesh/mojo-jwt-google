@@ -1,13 +1,12 @@
 package Mojo::JWT::Google;
 use utf8;
 use Mojo::Base qw(Mojo::JWT);
-use vars qw($VERSION);
 use Mojo::Collection 'c';
 use Mojo::File ();
 use Mojo::JSON qw(decode_json);
 use Carp;
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 has client_email => undef;
 has expires_in   => 3600;
@@ -93,13 +92,13 @@ Mojo::JWT::Google - Service Account tokens
 
 =head1 VERSION
 
-0.05
+0.09
 
 =head1 SYNOPSIS
 
-my $gjwt = Mojo::JWT::Google->new(secret => 's3cr3t',
-                                  scopes => [ '/my/scope/a', '/my/scope/b' ],
-                                  client_email => 'riche@cpan.org')->encode;
+  my $gjwt = Mojo::JWT::Google->new(secret => 's3cr3t',
+                                    scopes => [ '/my/scope/a', '/my/scope/b' ],
+                                    client_email => 'riche@cpan.org')->encode;
 
 =head1 DESCRIPTION
 
@@ -121,9 +120,9 @@ somewhere.  This will ease some busy work in configuring the object -- with
 virtually the only things to do is determine the scopes and the user_as if you
 need to impersonate.
 
- my $gjwt = Mojo::JWT::Google
-   ->new( from_json => '/my/secret.json',
-          scopes    => [ '/my/scope/a', '/my/scope/b' ])->encode;
+  my $gjwt = Mojo::JWT::Google
+    ->new( from_json => '/my/secret.json',
+           scopes    => [ '/my/scope/a', '/my/scope/b' ])->encode;
 
 =cut
 
@@ -159,7 +158,7 @@ your Google Business Administrator.
 =head2 target
 
 Get or set the target.  At the time of writing, there is only one valid target:
-https://www.googleapis.com/oauth2/v3/token.  This is the default value; if you
+https://www.googleapis.com/oauth2/v4/token.  This is the default value; if you
 have no need to customize this, then just fetch the default.
 
 
@@ -191,7 +190,7 @@ L<Mojo::JWT>
 
 =head1 SOURCE REPOSITORY
 
-L<http://github.com/rpcme/Mojo-JWT-Google>
+L<http://github.com/rabbiveesh/Mojo-JWT-Google>
 
 =head1 AUTHOR
 
@@ -200,6 +199,7 @@ Richard Elberger, <riche@cpan.org>
 =head1 CONTRIBUTORS
 
 Scott Wiersdorf, <scott@perlcode.org>
+Avishai Goldman, <veesh@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
