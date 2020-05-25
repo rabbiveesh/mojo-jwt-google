@@ -7,9 +7,7 @@ use Mojo::File ();
 use Mojo::JSON qw(decode_json);
 use Carp;
 
-BEGIN {
-  $Mojo::JWT::Google::VERSION = '0.07';
-}
+our $VERSION = '0.08';
 
 has client_email => undef;
 has expires_in   => 3600;
