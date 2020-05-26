@@ -1,17 +1,16 @@
 package Mojo::JWT::Google;
 use utf8;
 use Mojo::Base qw(Mojo::JWT);
-use Mojo::Collection 'c';
-use Mojo::File ();
+use Mojo::File qw(path);
 use Mojo::JSON qw(decode_json);
 use Carp;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 has client_email => undef;
 has expires_in   => 3600;
 has issue_at     => undef;
-has scopes       => sub { c() };
+has scopes       => sub { [] };
 has target       => q(https://www.googleapis.com/oauth2/v4/token);
 has user_as      => undef;
 has audience     => undef;
@@ -56,7 +55,7 @@ sub _construct_claims {
   my @scopes = @{ $self->scopes };
 
   croak "Can't use both scopes and audience in the same token" if @scopes && $self->audience;
-  $result->{scope} = c(@scopes)->join(' ')->to_string if @scopes;
+  $result->{scope} = join ' ', @scopes if @scopes;
   $result->{target_audience} = $self->audience if defined $self->audience;
 
   if ( not defined $self->issue_at ) {
@@ -74,7 +73,7 @@ sub from_json {
   my ($self, $value) = @_;
   return 0 if not defined $value;
   return 0 if not -f $value;
-  my $json = decode_json( Mojo::File->new($value)->slurp );
+  my $json = decode_json( path($value)->slurp );
   return 0 if not defined $json->{private_key};
   return 0 if $json->{type} ne 'service_account';
   $self->algorithm('RS256');
@@ -92,7 +91,7 @@ Mojo::JWT::Google - Service Account tokens
 
 =head1 VERSION
 
-0.09
+0.10
 
 =head1 SYNOPSIS
 

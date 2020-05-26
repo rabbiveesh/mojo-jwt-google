@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test2::V0;
-#TODO- upgrade to Test2
 use Mojo::JWT::Google;
 use Mojo::Collection 'c';
 use File::Basename 'dirname';
