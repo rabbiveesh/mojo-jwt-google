@@ -107,6 +107,7 @@ is $jwt->from_json( "$testdir/load4.json" ), 0, 'must be for service account';
 $jwt = Mojo::JWT::Google->new;
 is $jwt->client_email('mysa@developer.gserviceaccount.com'), $jwt, 'sa set';
 $jwt->expires('9999999999');
+$jwt->secret('this is a secret!');
 
 my $jwte = $jwt->encode;
 my $jwtd = $jwt->decode($jwte);

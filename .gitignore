@@ -19,3 +19,4 @@ nytprof.out
 /Mojo-JWT-Google-*
 
 .*.sw?
+.perl-version
