@@ -1,3 +1,8 @@
+{{$NEXT}}
+
+Fix test issue. Needed an explicit secret to encode
+
+
 0.10
 
 Cleaned up some code, explicitly depend on Mojolicious (not sure
