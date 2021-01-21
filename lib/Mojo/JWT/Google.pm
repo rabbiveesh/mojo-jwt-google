@@ -74,6 +74,14 @@ sub from_json {
   return 1
 }
 
+sub as_form_data {
+  my ($self) = @_;
+  return {
+    grant_type => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    assertion => $self->encode
+  }
+}
+
 1;
 
 
@@ -93,9 +101,7 @@ Mojo::JWT::Google - Service Account tokens
      scopes    => 'https://www.googleapis.com/auth/gmail.send',
      user_as   => 'some-email@your-org.com'); # if you have domain-wide delegation
   my $ua = Mojo::UserAgent->new;
-  my $tx = $ua->post('https://www.googleapis.com/oauth2/v4/token', form => {
-    grant_tpye => 'urn:ietf:params:oauth:grant-type:jwt-bearer'
-    assertion => $jwt->encode });
+  my $tx = $ua->post('https://www.googleapis.com/oauth2/v4/token', form => $gjwt->as_form_data);
   $tx->res->json('/access_token') # will contain your access token 
   
   # authenticating to use the Identity Aware Proxy
@@ -103,9 +109,7 @@ Mojo::JWT::Google - Service Account tokens
      from_json => '/my/secret/project-b98ale897.json',
      audience  => 'the-client-id-from-your-IAP');
   my $ua = Mojo::UserAgent->new;
-  my $tx = $ua->post('https://www.googleapis.com/oauth2/v4/token', form => {
-    grant_tpye => 'urn:ietf:params:oauth:grant-type:jwt-bearer'
-    assertion => $jwt->encode });
+  my $tx = $ua->post('https://www.googleapis.com/oauth2/v4/token', form => $gjwt->as_form_data);
   $tx->res->json('/id_token') # will contain your id token 
 
 =head1 DESCRIPTION
@@ -131,6 +135,12 @@ need to impersonate.
   my $gjwt = Mojo::JWT::Google
     ->new( from_json => '/my/secret.json',
            scopes    => [ '/my/scope/a', '/my/scope/b' ])->encode;
+
+
+To authenticate, send a post request to https://www.googleapis.com/oauth2/v4/token, 
+your Mojo::JWT::Google's as_form_data method.
+
+  $ua->post('https://www.googleapis.com/oauth2/v4/token', form => $gjwt->as_form_data);
 
 =cut
 
