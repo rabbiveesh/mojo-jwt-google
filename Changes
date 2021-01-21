@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- remove VERSION from pod. try `perl -MMojo::JWT::Google\ 99999` instead
+
 0.13      2021-01-21 16:09:14 IST
 
 - from_json now dies on errors

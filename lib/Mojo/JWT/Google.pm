@@ -81,10 +81,6 @@ sub from_json {
 
 Mojo::JWT::Google - Service Account tokens
 
-=head1 VERSION
-
-0.13
-
 =head1 SYNOPSIS
 
   my $gjwt = Mojo::JWT::Google->new(secret => 's3cr3t',
