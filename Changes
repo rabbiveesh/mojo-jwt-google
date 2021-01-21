@@ -1,6 +1,6 @@
 {{$NEXT}}
 
-- remove VERSION from pod. try `perl -MMojo::JWT::Google\ 99999` instead
+- added as_form_data method, to simplify actual usage of this module
 
 0.13      2021-01-21 16:09:14 IST
 
