@@ -1,6 +1,7 @@
 {{$NEXT}}
 
 - from_json now dies on errors
+- docs now include examples of real world use
 
 0.12
 
