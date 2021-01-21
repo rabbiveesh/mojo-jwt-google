@@ -5,7 +5,7 @@ use Mojo::File qw(path);
 use Mojo::JSON qw(decode_json);
 use Carp;
 
-our $VERSION = '0.11';
+our $VERSION = '0.13';
 
 has client_email => undef;
 has expires_in   => 3600;
@@ -24,10 +24,6 @@ sub new {
 
   return $self;
 }
-
-#Mojo::JWT::Google->attr( claims => sub {
-#  return shift->_construct_claims;
-#}, sub { {} });
 
 sub claims {
   my ($self, $value) = @_;
@@ -87,13 +83,34 @@ Mojo::JWT::Google - Service Account tokens
 
 =head1 VERSION
 
-0.11
+0.13
 
 =head1 SYNOPSIS
 
   my $gjwt = Mojo::JWT::Google->new(secret => 's3cr3t',
                                     scopes => [ '/my/scope/a', '/my/scope/b' ],
                                     client_email => 'riche@cpan.org')->encode;
+
+  # authenticating for apis as a service account
+  my $gjwt = Mojo::JWT::Google->new(
+     from_json => '/my/secret/project-b98ale897.json',
+     scopes    => 'https://www.googleapis.com/auth/gmail.send',
+     user_as   => 'some-email@your-org.com'); # if you have domain-wide delegation
+  my $ua = Mojo::UserAgent->new;
+  my $tx = $ua->post('https://www.googleapis.com/oauth2/v4/token', form => {
+    grant_tpye => 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+    assertion => $jwt->encode });
+  $tx->res->json('/access_token') # will contain your access token 
+  
+  # authenticating to use the Identity Aware Proxy
+  my $gjwt = Mojo::JWT::Google->new(
+     from_json => '/my/secret/project-b98ale897.json',
+     audience  => 'the-client-id-from-your-IAP');
+  my $ua = Mojo::UserAgent->new;
+  my $tx = $ua->post('https://www.googleapis.com/oauth2/v4/token', form => {
+    grant_tpye => 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+    assertion => $jwt->encode });
+  $tx->res->json('/id_token') # will contain your id token 
 
 =head1 DESCRIPTION
 
