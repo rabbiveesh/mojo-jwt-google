@@ -1,6 +1,10 @@
 {{$NEXT}}
 
-Fix test issue. Needed an explicit secret to encode
+- from_json now dies on errors
+
+0.12
+
+- Fix test issue. Needed an explicit secret to encode
 
 
 0.10

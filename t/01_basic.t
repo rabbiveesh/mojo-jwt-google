@@ -83,7 +83,7 @@ my $testdir = dirname ( abs_path( __FILE__ ) );
 
 like dies {
   Mojo::JWT::Google->new( from_json => "$testdir/load0.json" ),
-}, qr/Your JSON file import failed.*/, 'dies on file load failure';
+}, qr/Cannot find file.*/, 'dies on file load failure';
 
 
 $jwt = Mojo::JWT::Google->new( from_json => "$testdir/load1.json" );
@@ -98,10 +98,20 @@ EOF
 is $jwt->client_email, '9dvse@developer.gserviceaccount.com',
   'client email matches';
 
-is $jwt->from_json, 0, 'requires parameter';
-is $jwt->from_json('/foo/bar/baz/me'), 0, 'file must exist';
-is $jwt->from_json( "$testdir/load3.json" ), 0, 'must have key defined';
-is $jwt->from_json( "$testdir/load4.json" ), 0, 'must be for service account';
+subtest 'error messages' => sub {
+  like dies {
+    $jwt->from_json
+  }, qr/filename .* from_json/x, 'requires parameter';
+  like dies {
+    $jwt->from_json('/foo/bar/baz/me')
+  }, qr/Cannot find file/, 'file must exist';
+  like dies {
+    $jwt->from_json( "$testdir/load3.json" )
+  }, qr/private \s* key .* from_json/x, 'must have key defined';
+  like dies {
+    $jwt->from_json( "$testdir/load4.json" )
+  }, qr/from_json .* service \s* account/x, 'must be for service account';
+};
 
 
 $jwt = Mojo::JWT::Google->new;

@@ -22,10 +22,6 @@ sub new {
 
   my $result = $self->from_json($self->{from_json});
 
-  if ( $result == 0 ) {
-    croak 'Your JSON file import failed.';
-    return undef;
-  }
   return $self;
 }
 
@@ -71,11 +67,11 @@ sub _construct_claims {
 
 sub from_json {
   my ($self, $value) = @_;
-  return 0 if not defined $value;
-  return 0 if not -f $value;
+  croak 'You did not pass a filename to from_json' if not defined $value;
+  croak 'Cannot find file passed to from_json' if not -f $value;
   my $json = decode_json( path($value)->slurp );
-  return 0 if not defined $json->{private_key};
-  return 0 if $json->{type} ne 'service_account';
+  croak 'private key was not found in file passed to from_json' unless $json->{private_key};
+  croak 'from_json only works with service accounts' if $json->{type} ne 'service_account';
   $self->algorithm('RS256');
   $self->secret($json->{private_key});
   $self->client_email($json->{client_email});
@@ -178,7 +174,7 @@ Inherits all methods from L<Mojo::JWT> and defines the following new ones.
 Loads the JSON file from Google with the client ID information in it and sets
 the respective attributes.
 
-Returns 0 on failure: file not found or value not defined
+Dies on failure: file not found or value not defined
 
  $gjwt->from_json('/my/google/app/project/sa/json/file');
 
