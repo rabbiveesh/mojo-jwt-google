@@ -138,7 +138,7 @@ need to impersonate.
 
 
 To authenticate, send a post request to https://www.googleapis.com/oauth2/v4/token, 
-your Mojo::JWT::Google's as_form_data method.
+with your Mojo::JWT::Google's as_form_data method as the payload.
 
   $ua->post('https://www.googleapis.com/oauth2/v4/token', form => $gjwt->as_form_data);
 
