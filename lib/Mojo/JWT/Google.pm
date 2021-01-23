@@ -5,7 +5,7 @@ use Mojo::File qw(path);
 use Mojo::JSON qw(decode_json);
 use Carp;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 has client_email => undef;
 has expires_in   => 3600;
