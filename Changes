@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- added missing prereq and fixed typo
+
 0.14      2021-01-21 19:16:42 IST
 
 - added as_form_data method, to simplify actual usage of this module
