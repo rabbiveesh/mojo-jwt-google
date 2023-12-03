@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test2::V0;
+use Test2::Tools::Compare qw( number_gt );
 use Mojo::JWT::Google;
 use Mojo::Collection 'c';
 use File::Basename 'dirname';
@@ -98,8 +99,6 @@ EOF
 is $jwt->client_email, '9dvse@developer.gserviceaccount.com',
   'client email matches';
 
-# TODO - figure out how to test the as_form_data method
-
 subtest 'error messages' => sub {
   like dies {
     $jwt->from_json
@@ -117,10 +116,21 @@ subtest 'error messages' => sub {
 
 
 $jwt = Mojo::JWT::Google->new;
-is $jwt->client_email('mysa@developer.gserviceaccount.com'), $jwt, 'sa set';
+is $jwt->client_email($client_email), $jwt, 'sa set';
 $jwt->expires('9999999999');
 $jwt->secret('this is a secret!');
 
-my $jwte = $jwt->encode;
-my $jwtd = $jwt->decode($jwte);
+my $form_data = $jwt->as_form_data;
+is $form_data,
+    {
+        assertion => match qr/./,
+        grant_type => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    },
+    'as form data';
+is $jwt->decode($form_data->{assertion}), {
+    exp => number_gt(0),
+    iss => $client_email,
+    aud => $target
+}, 'assertion';
+
 done_testing;
